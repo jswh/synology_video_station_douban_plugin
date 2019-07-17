@@ -94,7 +94,7 @@ class DoubanMovie
         $min = $this->getJsonValue('image', '');
         $raw = str_replace('s_ratio_poster', 'raw', $min);
 
-        return str_replace('webp', 'jpg', $raw);
+        return 'https://api.9hut.cn/pic.php?url=' . str_replace('webp', 'jpg', $raw);
     }
 
     protected function getJsonValue($key, $default)
@@ -226,4 +226,4 @@ function test($title, $lang)
     //Get metadata
     return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
-print_r(test('战狼', 'chs'));
+//print_r(test('战狼', 'chs'));
