@@ -27,7 +27,7 @@ function ProcessDouban($input, $lang, $type, $limit, $search_properties, $allowg
 	preg_match_all('/\/movie\/subject\/[0-9]+/', $query_data, $detailPath);
 
 	//Get metadata
-	return GetMetadataDouban($query_data[0], $lang);
+	return GetMetadataDouban($detailPath[0], $lang);
 }
 //=========================================================
 // douban end
