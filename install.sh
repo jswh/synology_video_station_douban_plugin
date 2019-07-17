@@ -9,7 +9,7 @@ vVersion='v201903170121';
 vPlugins='/var/packages/VideoStation/target/plugins';
 vUI='/var/packages/VideoStation/target';
 vAction=$1;
-pack='https://github.com/jswh/synology_video_station_douban_plugin/releases/download/0.0.1/video_station_douban_patch_beta.dat'
+pack='https://github.com/jswh/synology_video_station_douban_plugin/releases/download/v1.0-beta/release.dat'
 # Logo  ******************************************************************
 CopyrightLogo="
                          DS Video Douban Patch $vVersion
