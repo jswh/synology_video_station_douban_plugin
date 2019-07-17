@@ -8,11 +8,8 @@ class DoubanMovie
     {
         $this->id = $id;
         $this->data = $data;
-        $a = str_replace("\n", "", $data);
-        $b = [];
-        preg_match_all('/type="application\/ld\+json">(.*)<\/script>/', $a, $b);
-        $b = explode('</script>', $b[1][0]);
-        $this->json = @json_decode($b[0], true);
+        $json = $this->pregTagContent('/type="application\/ld\+json">(.*)<\/script>/', '</script>');
+        $this->json = @json_decode($json, true);
     }
 
     public function getTitle()
@@ -80,7 +77,7 @@ class DoubanMovie
 
     public function getSummary()
     {
-        return $this->getJsonValue('description', '');
+        return $this->pregTagContent('/<span property="v:summary" class="">(.*)<\/span>/', '</span>');
     }
 
     public function getRating()
@@ -107,12 +104,21 @@ class DoubanMovie
         }
         return $default;
     }
-    protected function pregOneValue($pattern, $data = null)
+
+    protected function pregTagContent($pattern, $closeTag) {
+        $a = str_replace("\n", "", $this->data);
+        $b = [];
+        preg_match_all($pattern, $a, $b);
+        $b = explode($closeTag, $b[1][0]);
+
+        return $b[0];
+    }
+
+    protected function pregOneValue($pattern)
     {
-        $data = $data ?: $this->data;
         $result = [];
         $title = null;
-        preg_match_all($pattern, $data, $result);
+        preg_match_all($pattern, $this->data, $result);
         if (count($result) > 1) {
             $title = current($result[1]);
         }
@@ -148,6 +154,9 @@ function GetMovieInfoDouban($movie_data, $data)
         $data['extra'][PLUGINID]['collection_id'] = array('themoviedb' => $movie_data->belongs_to_collection->id);
     }
 
+    if (!isset($data['genre'])) {
+        $data['genre'] = [];
+    }
     // genre
     foreach ($movie_data->getGenres() as $item) {
         if (!in_array($item, $data['genre'])) {
@@ -217,4 +226,4 @@ function test($title, $lang)
     //Get metadata
     return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
-//print_r(test('战狼', 'chs'));
+print_r(test('战狼', 'chs'));
