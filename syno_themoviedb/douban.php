@@ -11,7 +11,7 @@ class DoubanMovie
         $this->mobile_data = $mobile_data;
         $a = str_replace("\n", "", $data);
         $b = [];
-        preg_match_all('/type="application\/ld\+json">(.*)<\/script>.*<body>/', $a, $b);
+        preg_match_all('/type="application\/ld\+json">(.*)<\/script>/', $a, $b);
         $b = explode('</script>', $b[1][0]);
         $this->json = @json_decode($b[0], true);
     }
@@ -196,7 +196,7 @@ function GetMetadataDouban($query_data, $lang)
         $data = $DATA_TEMPLATE;
         //Get movie
         $movie_data = HTTPGETRequest('https://movie.douban.com' . str_replace('movie/', '', $item)  .  '/');
-        $mobile_data = HTTPGETRequest('https://m.douban.com' . $item  .  '/');
+        $mobile_data = file_get_contents('https://m.douban.com' . $item  .  '/');
         //error_log(print_r( $movie_data, true), 3, "/var/packages/VideoStation/target/plugins/syno_themoviedb/my-errors.log");
         if (!$movie_data) {
             continue;
