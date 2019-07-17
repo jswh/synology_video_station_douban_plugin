@@ -4,11 +4,10 @@ class DoubanMovie
     public $data, $id;
     public $mobile_data;
     public $json;
-    public function __construct($id, $data, $mobile_data)
+    public function __construct($id, $data)
     {
         $this->id = $id;
         $this->data = $data;
-        $this->mobile_data = $mobile_data;
         $a = str_replace("\n", "", $data);
         $b = [];
         preg_match_all('/type="application\/ld\+json">(.*)<\/script>/', $a, $b);
@@ -81,7 +80,7 @@ class DoubanMovie
 
     public function getSummary()
     {
-        return $this->pregOneValue('/<p data-clamp="3">(.*)<\/p>/', $this->mobile_data);
+        return $this->getJsonValue('description', '');
     }
 
     public function getRating()
@@ -129,6 +128,7 @@ function GetMovieInfoDouban($movie_data, $data)
     $data['tagline']                 = $movie_data->getTagline();
     $data['original_available']         = $movie_data->getOriginAvailable();
     $data['summary']                 = $movie_data->getSummary();
+    $data['id'] = $movie_data->id;
 
     //extra
     $data['extra'] = array();
@@ -154,24 +154,17 @@ function GetMovieInfoDouban($movie_data, $data)
             array_push($data['genre'], $item);
         }
     }
-    // actor
-    foreach ($movie_data->getActors() as $item) {
-        if (!in_array($item->name, $data['actor'])) {
-            array_push($data['actor'], $item->name);
-        }
-    }
 
-    // director
-    foreach ($movie_data->getDirectors() as $item) {
-        if (!in_array($item->name, $data['director'])) {
-            array_push($data['director'], $item->name);
+    $keys = ['actor', 'director', 'writer'];
+    foreach ($keys as $key) {
+        if (!isset($data[$key])) {
+            $data[$key] = [];
         }
-    }
-
-    // writer
-    foreach ($movie_data->getWriters() as $item) {
-        if (!in_array($item->name, $data['writer'])) {
-            array_push($data['writer'], $item->name);
+        $fn = 'get' . ucfirst($key) . 's';
+        foreach ($movie_data->{$fn}() as $item) {
+            if (!in_array($item['name'], $data[$key])) {
+                array_push($data[$key], $item['name']);
+            }
         }
     }
     //error_log(print_r( $movie_data, true), 3, "/var/packages/VideoStation/target/plugins/syno_themoviedb/my-errors.log");
@@ -196,12 +189,11 @@ function GetMetadataDouban($query_data, $lang)
         $data = $DATA_TEMPLATE;
         //Get movie
         $movie_data = HTTPGETRequest('https://movie.douban.com' . str_replace('movie/', '', $item)  .  '/');
-        $mobile_data = file_get_contents('https://m.douban.com' . $item  .  '/');
         //error_log(print_r( $movie_data, true), 3, "/var/packages/VideoStation/target/plugins/syno_themoviedb/my-errors.log");
         if (!$movie_data) {
             continue;
         }
-        $movie_data = new DoubanMovie(str_replace('/movie/subject/', '', $item), $movie_data, $mobile_data);
+        $movie_data = new DoubanMovie(str_replace('/movie/subject/', '', $item), $movie_data);
         $data = GetMovieInfoDouban($movie_data, $data);
 
         //Append to result
@@ -223,6 +215,6 @@ function test($title, $lang)
     preg_match_all('/\/movie\/subject\/[0-9]+/', $query_data, $detailPath);
 
     //Get metadata
-    return GetMetadataDouban($detailPath[0], $lang);
+    return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
 //print_r(test('战狼', 'chs'));
