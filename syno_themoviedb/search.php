@@ -199,10 +199,10 @@ function ProcessTMDB($input, $lang, $type, $limit, $search_properties, $allowgue
 function Process($input, $lang, $type, $limit, $search_properties, $allowguess, $id)
 {
 	$t1 = microtime(true);
-	if ('chs' == $lang) {
-		$RET = ProcessDouban($input, $lang, $type, $limit, $search_properties, $allowguess, $id);
-	} else {
+	if ('enu' == $lang) {
 		$RET = ProcessTMDB($input, $lang, $type, $limit, $search_properties, $allowguess, $id);
+	} else {
+		$RET = ProcessDouban($input, $lang, $type, $limit, $search_properties, $allowguess, $id);
 	}
 	$t2 = microtime(true);
 	//error_log(print_r( $_SERVER, true), 3, "/var/packages/VideoStation/target/plugins/syno_themoviedb/my-errors.log");
