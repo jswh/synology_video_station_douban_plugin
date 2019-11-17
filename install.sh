@@ -68,7 +68,8 @@ function uninstall()
     mv -f $vPlugins/syno_thetvdb/search.php.orig /$vPlugins/syno_thetvdb/search.php
     mv -f $vPlugins/syno_file_assets/episode.inc.php.orig /$vPlugins/syno_file_assets/episode.inc.php
     mv -f $vUI/ui/videostation2.js.orig $vUI/ui/videostation2.js
-
+    
+    rm $vPlugins/syno_themoviedb/douban.php
 
     echo 'Congratulations, DS Video Douban Patch uninstall completed.';
     echo '==========================================================================';
