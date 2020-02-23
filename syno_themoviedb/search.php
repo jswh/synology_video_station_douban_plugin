@@ -22,7 +22,7 @@ function ProcessDouban($input, $lang, $type, $limit, $search_properties, $allowg
 	}
 
 	//$query_data = json_decode( HTTPGETReques t('http: //api.9hut.cn/douban.php?q=' . $title ), true );
-	$query_data = HTTPGETRequest('https://m.douban.com/search/?query=' . $title . '&type=movie');
+	$query_data = getRequest('https://m.douban.com/search/?query=' . $title . '&type=movie');
 	$detailPath = array();
 	preg_match_all('/\/movie\/subject\/[0-9]+/', $query_data, $detailPath);
 

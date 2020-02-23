@@ -1,4 +1,7 @@
 <?php
+function getRequest($url) {
+    return HTTPGetRequest('https://quiet-cake-f23b.jswh-cf-workers.workers.dev/-----' . $url);
+}
 class DoubanMovie
 {
     public $data, $id;
@@ -197,7 +200,7 @@ function GetMetadataDouban($query_data, $lang)
         //Copy template
         $data = $DATA_TEMPLATE;
         //Get movie
-        $movie_data = HTTPGETRequest('https://movie.douban.com' . str_replace('movie/', '', $item)  .  '/');
+        $movie_data = getRequest('https://movie.douban.com' . str_replace('movie/', '', $item)  .  '/');
         //error_log(print_r( $movie_data, true), 3, "/var/packages/VideoStation/target/plugins/syno_themoviedb/my-errors.log");
         if (!$movie_data) {
             continue;
@@ -219,7 +222,7 @@ function test($title, $lang)
             return file_get_contents($url);
         }
     }
-    $query_data = HTTPGETRequest('https://m.douban.com/search/?query=' . $title . '&type=movie');
+    $query_data = getRequest('https://m.douban.com/search/?query=' . $title . '&type=movie');
     $detailPath = array();
     preg_match_all('/\/movie\/subject\/[0-9]+/', $query_data, $detailPath);
 
