@@ -9,7 +9,8 @@ vVersion='v201903170121';
 vPlugins='/var/packages/VideoStation/target/plugins';
 vUI='/var/packages/VideoStation/target';
 vAction=$1;
-pack='https://github.com/jswh/synology_video_station_douban_plugin/releases/download/v1.0-beta/release.dat'
+pack='https://github.com/jswh/synology_video_station_douban_plugin/archive/v1.2.tar.gz'
+dist='synology_video_station_douban_plugin-1.2'
 # Logo  ******************************************************************
 CopyrightLogo="
                          DS Video Douban Patch $vVersion
@@ -41,8 +42,10 @@ function install()
         mv $vPlugins/syno_file_assets/episode.inc.php $vPlugins/syno_file_assets/episode.inc.php.orig
     fi;
 
-    wget --no-check-certificate $pack -O video_station_douban_patch.tar;
-    tar -xvf video_station_douban_patch.tar
+    wget --no-check-certificate $pack -O video_station_douban_patch.tar.gz;
+    tar -zxvf video_station_douban_patch.tar.gz
+
+        cd $dist
 
     \cp -rfa ./syno_themoviedb $vPlugins/;
     \cp -rfa ./syno_synovideodb $vPlugins/;
@@ -68,8 +71,10 @@ function uninstall()
     mv -f $vPlugins/syno_thetvdb/search.php.orig /$vPlugins/syno_thetvdb/search.php
     mv -f $vPlugins/syno_file_assets/episode.inc.php.orig /$vPlugins/syno_file_assets/episode.inc.php
     mv -f $vUI/ui/videostation2.js.orig $vUI/ui/videostation2.js
-    
+
     rm $vPlugins/syno_themoviedb/douban.php
+
+    rm -rf /tmp/$dist;
 
     echo 'Congratulations, DS Video Douban Patch uninstall completed.';
     echo '==========================================================================';
