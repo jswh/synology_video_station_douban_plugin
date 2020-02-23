@@ -11,3 +11,6 @@
 4. 执行`sudo bash install.sh install`
 
 所有权利归老哥所有
+
++++++++++
+2020-02-23 更新 使用 cloudflare workers 代理服务器间接访问豆瓣
