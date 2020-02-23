@@ -2,6 +2,7 @@
 <?php
 
 require_once(dirname(__FILE__) . '/../constant.php');
+require_once(dirname(__FILE__) . '/../syno_themoviedb/douban.php');
 
 define('PLUGINID', 'com.synology.TheTVDB');
 define('API_URL', 'https://www.thetvdb.com/api/');
@@ -30,6 +31,29 @@ function ConvertToAPILang($lang)
 	return $ret;
 }
 
+//=========================================================
+// douban begin
+//=========================================================
+function ProcessDouban($input, $lang, $type, $limit, $search_properties, $allowguess, $id)
+{
+	$title 	= $input['title'];
+	$year 	= ParseYear($input['original_availa ble']);
+	$lang 	= ConvertToAPILang($lang);
+	if (!$lang) {
+		return array();
+	}
+
+	//$query_data = json_decode( HTTPGETReques t('http: //api.9hut.cn/douban.php?q=' . $title ), true );
+	$query_data = getRequest('https://m.douban.com/search/?query=' . $title . '&type=movie');
+	$detailPath = array();
+	preg_match_all('/\/movie\/subject\/[0-9]+/', $query_data, $detailPath);
+
+	//Get metadata
+	return GetMetadataDouban($detailPath[0], $lang);
+}
+//=========================================================
+// douban end
+//=========================================================
 
 // tvshow_episode 单集
 // tvshow 总
@@ -46,9 +70,9 @@ function ConvertToAPILang($lang)
 function GetMetadata($query_data, $season, $episode, $lang, $type)
 {
 	global $DATA_TEMPLATE;
-	
+
 	//error_log(print_r( array('query_data' => $query_data, 'season'=>$season, 'episode' => $episode, 'lang'=>$lang, 'type'=>$type), true), 3, "/var/packages/VideoStation/target/plugins/syno_thetvdb/my-errors.log");
-	
+
 	//Foreach query result
 	$result = array();
 	foreach($query_data as $item) {
@@ -70,7 +94,7 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 		if (!$movie_data) {
 			continue;
 		}
-		
+
 		$data['path'] = NULL;
 		$data['title'] = $movie_data->title;
 		$data['tagline'] = implode(',', $movie_data->aka);
@@ -81,9 +105,9 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 		$data['episode'] = (int)$episode;
 		$data['certificate'] = array();
 		$data['extra'] = NULL;
-		
+
 		$data['extra'][PLUGINID]['list'] = array();
-		
+
 		$data['extra'][PLUGINID] = array('reference' => array());
 		$data['extra'][PLUGINID]['reference']['thetvdb'] = (string)$movie_data->id;
 		if (isset($movie_data->imdb_id)) {
@@ -100,7 +124,7 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 			$data['extra'][PLUGINID]['backdrop'] = array((string)$movie_data->backdrop_path);
 		}
 		*/
-		
+
 		// writer
 		if( isset($movie_data->writers) ){
 			foreach ($movie_data->writers as $item) {
@@ -109,7 +133,7 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 				}
 			}
 		}
-		
+
 		// director
 		if( isset($movie_data->directors) ){
 			foreach ($movie_data->directors as $item) {
@@ -118,7 +142,7 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 				}
 			}
 		}
-		
+
 		// actor
 		if( isset($movie_data->actors) ){
 			foreach ($movie_data->actors as $item) {
@@ -127,7 +151,7 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 				}
 			}
 		}
-		
+
 		// genre
 		if( isset($movie_data->genres) ){
 			foreach ($movie_data->genres as $item) {
@@ -136,22 +160,22 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 				}
 			}
 		}
-		
+
 		// editor
 		//array_push($data['editor'], array());
-		
+
 		//array_values
 		switch ($type) {
 			case 'tvshow':
 				//$data = GetTVShowInfo($series_data, $actors, $data);
-				
+
 				if (isset($movie_data->images)) {
 					$data['extra'][PLUGINID]['poster'] = array((string)$movie_data->images->large);
 				}
 				if (isset($movie_data->backdrop_path)) {
 					$data['extra'][PLUGINID]['backdrop'] = array((string)$movie_data->backdrop_path);
 				}
-				
+
 				$data['extra'][PLUGINID]['list'] = array();
 				$data['id'] = (string)$movie_data->id;
 				$data['lang'] = ConvertToAPILang($lang);
@@ -178,7 +202,7 @@ function GetMetadata($query_data, $season, $episode, $lang, $type)
 						'summary'	=> $data['summary'],
 						'tagline'	=> $data['tagline'],
 						'writer'	=> $data['writer']
-					);					
+					);
 				//}
 				$list[] = array(
 					'season' => $data['season'],
@@ -262,7 +286,7 @@ function Query($query, $year, $lang, $limit, $season, $episode)
 
 	//Get the first $limit items
 	$result = array_slice($result, 0, $limit);
-	
+
 	//error_log(print_r( array('xXXx' => 'Query', 'result'=>$result), true), 3, "/var/packages/VideoStation/target/plugins/syno_thetvdb/my-errors.log");
 	return $result;
 }
@@ -295,12 +319,13 @@ function Process($input, $lang, $type, $limit, $search_properties, $allowguess, 
 			$year = ParseYear($pluginid['tvshow']['original_available']);
 		}
 	}
+	return ProcessDouban($input, $lang, $type, $limit, $search_properties, $allowguess, $id);
 
 	//Search
 	$query_data = array();
 	//$titles = GetGuessingList($title, $allowguess);
 	$titles = GetGuessingList($title, false);
-	
+
 	foreach ($titles as $checkTitle) {
 		if (empty($checkTitle)) {
 			continue;

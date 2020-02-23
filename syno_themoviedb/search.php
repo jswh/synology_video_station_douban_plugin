@@ -5,7 +5,7 @@ require_once(dirname(__FILE__) . '/../util_themoviedb.php');
 require_once(dirname(__FILE__) . '/../search.inc.php');
 require_once(dirname(__FILE__) . '/douban.php');
 
-$SUPPORTED_TYPE = array('movie', 'tvshow', 'tvshow_episode');
+$SUPPORTED_TYPE = array('movie');
 $SUPPORTED_PROPERTIES = array('title');
 
 
