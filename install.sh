@@ -5,7 +5,7 @@ export PATH
 clear;
 
 # VAR   ******************************************************************
-vVersion='v201903170121';
+vVersion='v20200309';
 vPlugins='/var/packages/VideoStation/target/plugins';
 vUI='/var/packages/VideoStation/target';
 vAction=$1;
