@@ -1,6 +1,6 @@
 <?php
 function build_proxy_url($url) {
-    return 'https://quiet-cake-f23b.jswh-cf-workers.workers.dev/-----' . $url;
+    return 'https://synology.jswh-cf-workers.workers.dev/-----' . $url;
 }
 function getRequest($url) {
     return HTTPGetRequest(build_proxy_url($url));
@@ -235,4 +235,4 @@ function test($title, $lang)
     //Get metadata
     return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
-print_r(test('庆余年', 'chs'));
+//print_r(test('庆余年', 'chs'));
