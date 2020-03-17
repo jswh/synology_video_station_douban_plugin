@@ -1,6 +1,9 @@
 <?php
+function build_proxy_url($url) {
+    return 'https://quiet-cake-f23b.jswh-cf-workers.workers.dev/-----' . $url;
+}
 function getRequest($url) {
-    return HTTPGetRequest('https://quiet-cake-f23b.jswh-cf-workers.workers.dev/-----' . $url);
+    return HTTPGetRequest(build_proxy_url($url));
 }
 class DoubanMovie
 {
@@ -97,7 +100,7 @@ class DoubanMovie
         $min = $this->getJsonValue('image', '');
         $raw = str_replace('s_ratio_poster', 'l', $min);
 
-        return 'https://api.9hut.cn/pic.php?url=' . str_replace('webp', 'jpg', $raw);
+        return build_proxy_url(str_replace('webp', 'jpg', $raw));
     }
 
     protected function getJsonValue($key, $default)
@@ -132,13 +135,15 @@ class DoubanMovie
 function GetMovieInfoDouban($movie_data, $data)
 {
     if (!isset($movie_data->aka)) $movie_data->aka = array();
-    $data['title']                     = $movie_data->getTitle();
-    $data['original_title']            = $movie_data->getOriginalTitle();
-    $data['tagline']                 = $movie_data->getTagline();
+    $data['title']                      = $movie_data->getTitle();
+    $data['original_title']             = $movie_data->getOriginalTitle();
+    $data['tagline']                    = $movie_data->getTagline();
     $data['original_available']         = $movie_data->getOriginAvailable();
-    $data['summary']                 = $movie_data->getSummary();
+    $data['summary']                    = $movie_data->getSummary();
     $data['id'] = $movie_data->id;
 
+    $data['summary'] = str_replace(' ', '', $data['summary']);
+    $data['summary'] = str_replace('<br/>', "\n", $data['summary']);
     //extra
     $data['extra'] = array();
     $data['extra'][PLUGINID] = array('reference' => array());
@@ -222,6 +227,7 @@ function test($title, $lang)
             return file_get_contents($url);
         }
     }
+    define('PLUGINID', 'test');
     $query_data = getRequest('https://m.douban.com/search/?query=' . $title . '&type=movie');
     $detailPath = array();
     preg_match_all('/\/movie\/subject\/[0-9]+/', $query_data, $detailPath);
@@ -229,4 +235,4 @@ function test($title, $lang)
     //Get metadata
     return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
-//print_r(test('绿皮书', 'chs'));
+print_r(test('庆余年', 'chs'));
