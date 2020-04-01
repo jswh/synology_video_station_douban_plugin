@@ -1,6 +1,7 @@
 <?php
 function build_proxy_url($url) {
-    return 'https://synology.jswh-cf-workers.workers.dev/-----' . $url;
+    return $url;
+    return 'https://quiet-cake-f23b.jswh-cf-workers.workers.dev/-----' . $url;
 }
 function getRequest($url) {
     return HTTPGetRequest(build_proxy_url($url));
@@ -14,7 +15,7 @@ class DoubanMovie
     {
         $this->id = $id;
         $this->data = $data;
-        $json = $this->pregTagContent('/type="application\/ld\+json">(.*)<\/script>/', '</script>');
+        $json = $this->pregTagContent('/type="application\/ld\+json">(.*\s*)<\/script>/', '</script>');
         $this->json = @json_decode($json, true);
     }
 
@@ -211,7 +212,9 @@ function GetMetadataDouban($query_data, $lang)
             continue;
         }
         $movie_data = new DoubanMovie(str_replace('/movie/subject/', '', $item), $movie_data);
+
         $data = GetMovieInfoDouban($movie_data, $data);
+        return;
 
         //Append to result
         $result[] = $data;
@@ -235,4 +238,4 @@ function test($title, $lang)
     //Get metadata
     return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
-//print_r(test('庆余年', 'chs'));
+print_r(test('碟中谍6', 'chs'));
