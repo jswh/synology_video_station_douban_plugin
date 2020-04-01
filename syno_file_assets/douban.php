@@ -1,6 +1,5 @@
 <?php
 function build_proxy_url($url) {
-    return $url;
     return 'https://quiet-cake-f23b.jswh-cf-workers.workers.dev/-----' . $url;
 }
 function getRequest($url) {
