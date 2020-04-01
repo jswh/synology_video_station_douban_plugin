@@ -213,7 +213,6 @@ function GetMetadataDouban($query_data, $lang)
         $movie_data = new DoubanMovie(str_replace('/movie/subject/', '', $item), $movie_data);
 
         $data = GetMovieInfoDouban($movie_data, $data);
-        return;
 
         //Append to result
         $result[] = $data;
