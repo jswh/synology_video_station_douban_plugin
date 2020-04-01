@@ -238,4 +238,4 @@ function test($title, $lang)
     //Get metadata
     return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
-print_r(test('碟中谍6', 'chs'));
+#print_r(test('碟中谍6', 'chs'));
