@@ -113,6 +113,7 @@ class DoubanMovie
 
     protected function pregTagContent($pattern, $closeTag) {
         $a = str_replace("\n", "", $this->data);
+        $a = str_replace("\t", "", $a);
         $b = [];
         preg_match_all($pattern, $a, $b);
         $b = explode($closeTag, $b[1][0]);
