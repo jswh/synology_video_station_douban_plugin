@@ -10,7 +10,7 @@ vPlugins='/var/packages/VideoStation/target/plugins';
 vUI='/var/packages/VideoStation/target';
 vAction=$1;
 pack='https://github.com/jswh/synology_video_station_douban_plugin/archive/master.tar.gz'
-dist='synology_video_station_douban_plugin'
+dist='synology_video_station_douban_plugin-master'
 # Logo  ******************************************************************
 CopyrightLogo="
                          DS Video Douban Patch $vVersion
