@@ -1,6 +1,8 @@
 <?php
 function build_proxy_url($url) {
-    return 'https://quiet-cake-f23b.jswh-cf-workers.workers.dev/-----' . $url;
+    $worker = 'CF_WORKER_URL';
+    $worker = trim($worker, '/')
+    return $worker . '/-----' . $url;
 }
 function getRequest($url) {
     return HTTPGetRequest(build_proxy_url($url));
@@ -237,4 +239,4 @@ function test($title, $lang)
     //Get metadata
     return GetMetadataDouban(array_slice($detailPath[0], 0, 3), $lang);
 }
-#print_r(test('碟中谍6', 'chs'));
+print_r(test('速度与激情', 'chs'));

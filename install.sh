@@ -5,10 +5,11 @@ export PATH
 clear;
 
 # VAR   ******************************************************************
-vVersion='v20200309';
+vVersion='v2020409';
 vPlugins='/var/packages/VideoStation/target/plugins';
 vUI='/var/packages/VideoStation/target';
 vAction=$1;
+vWorker=$2
 pack='https://github.com/jswh/synology_video_station_douban_plugin/archive/master.tar.gz'
 dist='synology_video_station_douban_plugin-master'
 # Logo  ******************************************************************
@@ -56,6 +57,8 @@ function install()
     chmod 0755 $vPlugins/syno_themoviedb/search.php $vPlugins/syno_synovideodb/search.php $vPlugins/syno_thetvdb/search.php $vUI/ui/videostation2.js $vPlugins/syno_file_assets/episode.inc.php
 
     chown VideoStation:VideoStation $vPlugins/syno_themoviedb/search.php $vPlugins/syno_synovideodb/search.php $vPlugins/syno_thetvdb/search.php $vUI/ui/videostation2.js $vPlugins/syno_file_assets/episode.inc.php
+
+    sed "s/CF_WORKER_URL/$2/g" $vPlugins/syno_file_assets/douban.tmp.php > $vPlugins/syno_file_assets/douban.php
 
     cd -
 

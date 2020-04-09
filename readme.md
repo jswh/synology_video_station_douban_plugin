@@ -8,7 +8,16 @@
 1. ssh 登录群晖系统
 2. 执行`wget https://raw.githubusercontent.com/jswh/synology_video_station_douban_plugin/master/install.sh`
 3. 执行`sudo bash install.sh uninstall` （第一次安装可以跳过这个步骤）
-4. 执行`sudo bash install.sh install`
+4. 执行`sudo bash install.sh install 'http://quiet-cake-f23b.jswh-cf-workers.workers.dev'`
+
+#### 使用自己的cf-worker
+刮削器目前使用cf-worker搭建的代理来访问豆瓣来防止豆瓣屏蔽。cf-worker免费版本每天有10W的访问量，目前我公开worker已经基本饱和，建议使用自己的cf-worker。
+步骤如下
+1. 注册cloudflare https://dash.cloudflare.com/sign-up
+2. 登录后选择Workers ![批注 2020-04-09 114934.jpg](https://i.loli.net/2020/04/09/w8r62KjcpP4S5Tt.jpg)
+3. 点击create worker ![批注 2020-04-09 115054.jpg](https://i.loli.net/2020/04/09/KsI9qxpJhf8BciQ.jpg)
+4. 在左侧编辑框中黏贴代理代码.代码在[cf-worker.js](https://github.com/jswh/synology_video_station_douban_plugin/blob/master/cf-worker.js).然后点击save and deploy ![批注 2020-04-09 115254.jpg](https://i.loli.net/2020/04/09/SMl2sQg1wfImHKx.jpg)
+5. 预览界面上有你的worker代理地址，安装的时候替换即可 ![批注 2020-04-09 115714.jpg](https://i.loli.net/2020/04/09/evsglLICjf6dXE5.jpg)
 
 所有权利归老哥所有
 
