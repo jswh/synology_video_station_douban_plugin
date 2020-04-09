@@ -4,11 +4,17 @@
 
 修改内容是直接抓取了网页信息。并且设置为电影和电视类型都可用。
 
-使用：
+安装：
 1. ssh 登录群晖系统
 2. 执行`wget https://raw.githubusercontent.com/jswh/synology_video_station_douban_plugin/master/install.sh`
 3. 执行`sudo bash install.sh uninstall` （第一次安装可以跳过这个步骤）
 4. 执行`sudo bash install.sh install 'http://quiet-cake-f23b.jswh-cf-workers.workers.dev'`
+
+卸载
+1. ssh 登录群晖系统
+2. 执行`wget https://raw.githubusercontent.com/jswh/synology_video_station_douban_plugin/master/install.sh`
+3. 执行`sudo bash install.sh uninstall`
+
 
 #### 使用自己的cf-worker
 刮削器目前使用cf-worker搭建的代理来访问豆瓣来防止豆瓣屏蔽。cf-worker免费版本每天有10W的访问量，目前我公开worker已经基本饱和，建议使用自己的cf-worker。
