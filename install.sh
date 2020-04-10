@@ -75,7 +75,7 @@ function uninstall()
     mv -f $vPlugins/syno_file_assets/episode.inc.php.orig /$vPlugins/syno_file_assets/episode.inc.php
     mv -f $vUI/ui/videostation2.js.orig $vUI/ui/videostation2.js
 
-    rm $vPlugins/syno_themoviedb/douban.php
+    rm $vPlugins/syno_file_assets/douban.php
 
     rm -rf /tmp/$dist;
 

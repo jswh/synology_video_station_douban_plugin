@@ -1,7 +1,7 @@
 <?php
 function build_proxy_url($url) {
     $worker = 'CF_WORKER_URL';
-    $worker = trim($worker, '/')
+    $worker = trim($worker, '/');
     return $worker . '/-----' . $url;
 }
 function getRequest($url) {
