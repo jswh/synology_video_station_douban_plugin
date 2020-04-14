@@ -1,10 +1,10 @@
 终于我还是弃坑了。在我写了半天TMDB得东西之后，发现Video Station本来就是用的TMDB得接口啊（摔！自带得搜索不能用得原因是TMDB接口api地址被墙了。但是我调试api得时候发现了一个不正规得地址z4vrpkijmodhwsxzc.stoplight-proxy.io。遵循如下步骤修改就可以使用自带搜索了。
 
-ssh 登录群晖
-执行命令 cd /var/packages/VideoStation/target/plugins
-编辑 util_themoviedb.php 文件
-修改其中的api.themoviedb.org 为 z4vrpkijmodhwsxzc.stoplight-proxy.io
-好了，没事了，大家散了吧。
+1. ssh 登录群晖
+2. 执行命令 cd /var/packages/VideoStation/target/plugins
+3. 编辑 util_themoviedb.php 文件
+4. 修改其中的api.themoviedb.org 为 z4vrpkijmodhwsxzc.stoplight-proxy.io
+5. 好了，没事了，大家散了吧。
 
 # 以下内容已经弃坑
 
